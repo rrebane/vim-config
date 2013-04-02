@@ -712,8 +712,8 @@ if has("gui_running")
   endif
 else
   set background=dark
-  set t_Co=16
-  let g:solarized_termcolors=16
+  "set t_Co=16
+  "let g:solarized_termcolors=256
   colorscheme solarized
 endif
 :nohls
