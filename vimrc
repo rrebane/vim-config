@@ -192,7 +192,7 @@ let mapleader = ","
 nmap <silent> ,wa :1,9000bwipeout<cr>
 
 " Toggle paste mode
-nmap <silent> ,p :set invpaste<CR>:set paste?<CR>
+nmap <silent> ,pp :set invpaste<CR>:set paste?<CR>
 
 " cd to the directory containing the file in the buffer
 nmap <silent> ,cd :lcd %:h<CR>
