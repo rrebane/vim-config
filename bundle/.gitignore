@@ -9,6 +9,7 @@ vim-gundo
 vim-javascript
 vim-l9
 vim-mwutils
+vim-nerdcommenter
 vim-nerdtree
 vim-protodef
 vim-signs

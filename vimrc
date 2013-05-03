@@ -645,7 +645,7 @@ function! Preserve(command)
   call cursor(l, c)
 endfunction
 
-autocmd BufWritePre *.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cxx,*.c++,*.c,*.py,*.sc,*.sa :call Preserve("%s/\\s\\+$//e")
+autocmd BufWritePre *.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.sh :call Preserve("%s/\\s\\+$//e")
 
 "-----------------------------------------------------------------------------
 " Fix constant spelling mistakes
