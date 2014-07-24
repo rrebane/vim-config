@@ -26,9 +26,7 @@ XPT main hint=C++\ main\ including\ #includes
 #include <iostream>
 `includes^
 
-using namespace std;
-
-int main (int argc, char** argv) {
+int main(int, char**) {
     `cursor^
 
     return 0;
