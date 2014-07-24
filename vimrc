@@ -16,6 +16,22 @@ if has("unix")
   set runtimepath+=~/.vim/xpt-personal
 endif
 
+" CScope
+if has("cscope")
+    set csprg=/usr/bin/cscope
+    set csto=0
+    "set cst
+    set nocsverb
+    " add any database in current directory
+    if filereadable("cscope.out")
+        cs add cscope.out
+    " else add database pointed to by environment
+    elseif $CSCOPE_DB != ""
+        cs add $CSCOPE_DB
+    endif
+    set csverb
+endif
+
 " Set filetype stuff to on
 filetype on
 filetype plugin on
@@ -220,6 +236,16 @@ map! <S-Insert> <MiddleMouse>
 " set text wrapping toggles
 nmap <silent> ,ww :set invwrap<CR>:set wrap?<CR>
 
+" CScope mappings
+nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
 " allow command line editing like emacs
 cnoremap <C-A>      <Home>
 cnoremap <C-B>      <Left>
@@ -397,7 +423,7 @@ let NERDTreeIgnore=[ '\.ncb$', '\.suo$', '\.vcproj\.RIMNET', '\.obj$',
                    \ '\.ilk$', '^BuildLog.htm$', '\.pdb$', '\.idb$',
                    \ '\.embed\.manifest$', '\.embed\.manifest.res$',
                    \ '\.intermediate\.manifest$', '^mt.dep$', '\.o$',
-                   \ '\.lo$' ]
+                   \ '\.lo$', '^tags$', '^cscope\.' ]
 
 "-----------------------------------------------------------------------------
 " FSwitch mappings
@@ -430,11 +456,12 @@ nmap <silent> ,ff :FufFile<cr>
 nmap <silent> ,fc :FufMruCmd<cr>
 nmap <silent> ,fm :FufMruFile<cr>
 nmap <silent> ,fp :FufFile ~/git/*<cr>
+nmap <silent> ,ft :FufTag<cr>
 
 "-----------------------------------------------------------------------------
 " Gundo Settings
 "-----------------------------------------------------------------------------
-nmap <c-F5> :GundoToggle<cr>
+nmap <F5> :GundoToggle<cr>
 
 "-----------------------------------------------------------------------------
 " Conque Settings
@@ -444,6 +471,36 @@ let g:ConqueTerm_ReadUnfocused = 1
 let g:ConqueTerm_InsertOnEnter = 1
 let g:ConqueTerm_PromptRegex = '^-->'
 "let g:ConqueTerm_TERM = 'xterm'
+"
+"-----------------------------------------------------------------------------
+" Taglist Plugin Settings
+"-----------------------------------------------------------------------------
+" Toggle the taglist on an off with F8
+nmap <F8> :TlistToggle<CR>
+
+" Close the taglist with Shift-F8
+nmap <S-F8> :TlistClose<CR>
+
+" Disable highlighting
+let g:easytags_auto_highlight = 0
+
+" Other options
+let g:Tlist_Close_On_Select = 1
+let g:Tlist_Exit_OnlyWindow = 1
+let g:Tlist_GainFocus_On_ToggleOpen = 1
+let g:Tlist_Show_One_File = 1
+
+"-----------------------------------------------------------------------------
+" Ack Plugin Settings
+"-----------------------------------------------------------------------------
+" Using the Silver Searcher instead of Ack
+let g:ackprg = 'ag --nogroup --nocolor --column'
+
+"-----------------------------------------------------------------------------
+" Signs Plugin Settings
+"-----------------------------------------------------------------------------
+let g:vim_addon_signs = { 'provide_qf_command' : 0, 'provide_el_command' : 0 }
+let g:ackhighlight = 1
 
 "-----------------------------------------------------------------------------
 " Functions
@@ -645,7 +702,9 @@ function! Preserve(command)
   call cursor(l, c)
 endfunction
 
-autocmd BufWritePre *.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.sh :call Preserve("%s/\\s\\+$//e")
+autocmd BufWritePre *.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.sh,*.erl,*.conf,*.xml :call Preserve("%s/\\s\\+$//e")
+
+autocmd BufEnter,BufNew *.sc :set filetype=secrec
 
 "-----------------------------------------------------------------------------
 " Fix constant spelling mistakes

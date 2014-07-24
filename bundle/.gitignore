@@ -1,6 +1,8 @@
+vim-ack
 vim-bufkill
 vim-completion
 vim-easymotion
+vim-easytags
 vim-fswitch
 vim-forms
 vim-fugitive
@@ -8,6 +10,7 @@ vim-fuzzyfinder
 vim-gundo
 vim-javascript
 vim-l9
+vim-misc
 vim-mwutils
 vim-nerdcommenter
 vim-nerdtree
@@ -15,5 +18,6 @@ vim-protodef
 vim-signs
 vim-solarized
 vim-surround
+vim-taglist
 vim-unimpaired
 vim-xptemplate
