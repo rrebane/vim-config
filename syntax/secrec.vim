@@ -27,7 +27,7 @@ syn keyword scModifier      template domain kind dim type module import public p
 
 syn keyword scConstant      true false
 
-syn keyword scSupport       cat size shape reshape tostring assert declassify
+syn keyword scSupport       cat size shape reshape tostring assert declassify struct
 syn match   scSupport       "__[A-Za-z]*"
 
 syn match   scNumber        "\<\(0x\)\=\d\+\(\.\d\+\)\="
@@ -50,7 +50,7 @@ syn region  scParen         transparent start='(' end=')' contains=ALLBUT,scPare
 syn match   scBraceError    "\]"
 syn region  scBrace         transparent start='\[' end='\]' contains=ALLBUT,scBraceError,scBlock
 
-syn keyword scTodo          contained TODO FIXME XXX
+syn keyword scTodo          contained TODO FIXME XXX \todo \xxx \fixme
 syn region  scCommentL      start="//" skip="\\$" end="$" contains=scTodo,scNumberCom keepend
 
 syn match   scCommentError  "\*/"
