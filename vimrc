@@ -5,7 +5,6 @@
 "-----------------------------------------------------------------------------
 " Global Stuff
 "-----------------------------------------------------------------------------
-
 " Get pathogen up and running
 filetype off 
 call pathogen#runtime_append_all_bundles()
@@ -44,13 +43,17 @@ set softtabstop=4
 set expandtab
 set autoindent
 
-" Show tabs as >---
+" Except for some file types
+autocmd FileType html setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2
+
+" Disable wrapping for shell files
+autocmd FileType sh set textwidth=0
+
+" Show tabs as >--- and spaces as ·
 set listchars=tab:>-,trail:·
 " This enables it
 set list
-
-" Printing options
-set printoptions=header:0,duplex:long,paper:letter
 
 " set the search scan to wrap lines
 set wrapscan
@@ -79,10 +82,6 @@ set backspace=2
 " Make sure that unsaved buffers that are to be put in the background are 
 " allowed to go in there (ie. the "must save first" error doesn't come up)
 set hidden
-
-" Make the 'cw' and like commands put a $ at the end instead of just deleting
-" the text and replacing it
-"set cpoptions=ces$
 
 " Set the status line the way i like it
 set stl=%f\ %m\ %r%{fugitive#statusline()}\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\ [%b][0x%B]
@@ -179,10 +178,6 @@ set grepprg=grep\ -nH\ $*
 "set relativenumber
 set number
 
-" dictionary for english words
-" I don't actually use this much at all and it makes my life difficult in general
-"set dictionary=$VIM/words.txt
-
 " Spell checking
 set spell
 set spelllang=en_us
@@ -204,24 +199,11 @@ let java_allow_cpp_keywords = 1
 " System default for mappings is now the "," character
 let mapleader = ","
 
-" Wipe out all buffers
-nmap <silent> ,wa :1,9000bwipeout<cr>
-
 " Toggle paste mode
 nmap <silent> ,pp :set invpaste<CR>:set paste?<CR>
 
-" cd to the directory containing the file in the buffer
-nmap <silent> ,cd :lcd %:h<CR>
-nmap <silent> ,md :!mkdir -p %:p:h<CR>
-
 " Turn off that stupid highlight search
 nmap <silent> ,n :nohls<CR>
-
-" put the vim directives for my file editing settings in
-nmap <silent> ,vi ovim:set ts=2 sts=2 sw=2:<CR>vim600:fdm=marker fdl=1 fdc=0:<ESC>
-
-" Show all available VIM servers
-nmap <silent> ,ss :echo serverlist()<CR>
 
 " The following beast is something i didn't write... it will return the 
 " syntax highlighting group that the current "thing" under the cursor
@@ -245,19 +227,6 @@ nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-
-" allow command line editing like emacs
-cnoremap <C-A>      <Home>
-cnoremap <C-B>      <Left>
-cnoremap <C-E>      <End>
-cnoremap <C-F>      <Right>
-cnoremap <C-N>      <End>
-cnoremap <C-P>      <Up>
-cnoremap <ESC>b     <S-Left>
-cnoremap <ESC><C-B> <S-Left>
-cnoremap <ESC>f     <S-Right>
-cnoremap <ESC><C-F> <S-Right>
-cnoremap <ESC><C-H> <C-W>
 
 " Maps to make handling windows a bit easier
 "noremap <silent> ,h :wincmd h<CR>
@@ -285,13 +254,13 @@ noremap <silent> <C-8> <C-W>+
 noremap <silent> <C-9> <C-W>+
 noremap <silent> <C-0> <C-W>>
 
+" Shrink the current window to fit the number of lines in the buffer.  Useful
+" for those buffers that are only a few lines
+nmap <silent> ,sw :execute ":resize " . line('$')<cr>
+
 " Edit the vimrc file
 nmap <silent> ,ev :e $MYVIMRC<CR>
 nmap <silent> ,sv :so $MYVIMRC<CR>
-
-" Make horizontal scrolling easier
-nmap <silent> <C-o> 10zl
-nmap <silent> <C-i> 10zh
 
 " Add a GUID to the current line
 imap <C-J>d <C-r>=substitute(system("uuidgen"), '.$', '', 'g')<CR>
@@ -308,17 +277,6 @@ nmap <silent> ,gW :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 " Swap two words
 nmap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
 
-" Toggle fullscreen mode
-"nmap <silent> <F3> :call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
-
-" Underline the current line with '='
-nmap <silent> ,u= :t.\|s/./=/g\|:nohls<cr>
-nmap <silent> ,u- :t.\|s/./-/g\|:nohls<cr>
-
-" Shrink the current window to fit the number of lines in the buffer.  Useful
-" for those buffers that are only a few lines
-nmap <silent> ,sw :execute ":resize " . line('$')<cr>
-
 " Use the bufkill plugin to eliminate a buffer but keep the window layout
 nmap ,bd :BD<cr>
 
@@ -328,67 +286,14 @@ nnoremap <C-E> ,
 " Alright... let's try this out
 imap jj <esc>
 
-" I like jj - Let's try something else fun
-imap ,fn <c-r>=expand('%:t:r')<cr>
-
-" Clear the text using a motion / text object and then move the character to the
-" next word
-nmap <silent> ,C :set opfunc=ClearText<CR>g@
-vmap <silent> ,C :<C-U>call ClearText(visual(), 1)<CR>
-
 " Make the current file executable
 nmap ,x :w<cr>:!chmod 755 %<cr>:e<cr>
-
-" Digraphs
-" Alpha
-imap <c-l><c-a> <c-k>a*
-" Beta
-imap <c-l><c-b> <c-k>b*
-" Gamma
-imap <c-l><c-g> <c-k>g*
-" Delta
-imap <c-l><c-d> <c-k>d*
-" Epslion
-imap <c-l><c-e> <c-k>e*
-" Lambda
-imap <c-l><c-l> <c-k>l*
-" Eta
-imap <c-l><c-y> <c-k>y*
-" Theta
-imap <c-l><c-h> <c-k>h*
-" Mu
-imap <c-l><c-m> <c-k>m*
-" Rho
-imap <c-l><c-r> <c-k>r*
-" Pi
-imap <c-l><c-p> <c-k>p*
-" Phi
-imap <c-l><c-f> <c-k>f*
-
-function! ClearText(type, ...)
-  let sel_save = &selection
-  let &selection = "inclusive"
-  let reg_save = @@
-  if a:0 " Invoked from Visual mode, use '< and '> marks
-    silent exe "normal! '<" . a:type . "'>r w"
-  elseif a:type == 'line'
-    silent exe "normal! '[V']r w"
-  elseif a:type == 'line'
-    silent exe "normal! '[V']r w"
-    elseif a:type == 'block'
-      silent exe "normal! `[\<C-V>`]r w"
-    else
-      silent exe "normal! `[v`]r w"
-    endif
-    let &selection = sel_save
-    let @@ = reg_save
-endfunction
 
 " Syntax coloring lines that are too long just slows down the world
 set synmaxcol=2048
 
 " I don't like it when the matching parens are automatically highlighted
-let loaded_matchparen = 1
+"let loaded_matchparen = 1
 
 " Highlight the current line and column
 " Don't do this - It makes window redraws painfully slow
@@ -402,9 +307,6 @@ else
   let g:main_font = "DejaVu\\ Sans\\ Mono\\ 10"
   let g:small_font = "DejaVu\\ Sans\\ Mono\\ 2"
 endif
-
-" Disable wrapping for shell files
-autocmd FileType sh set textwidth=0
 
 "-----------------------------------------------------------------------------
 " NERD Tree Plugin Settings
@@ -503,6 +405,17 @@ let g:vim_addon_signs = { 'provide_qf_command' : 0, 'provide_el_command' : 0 }
 let g:ackhighlight = 1
 
 "-----------------------------------------------------------------------------
+" Latex Plugin Settings
+"-----------------------------------------------------------------------------
+let g:tex_flavor='latex'
+let g:Tex_ViewRule_pdf='okular'
+
+"-----------------------------------------------------------------------------
+" EasyTags Plugin Settings
+"-----------------------------------------------------------------------------
+:let g:easytags_on_cursorhold = 0
+
+"-----------------------------------------------------------------------------
 " Functions
 "-----------------------------------------------------------------------------
 if !exists('g:bufferJumpList')
@@ -552,21 +465,6 @@ nmap <silent> ,jbf :call JumpToBufferInJumpList('f')<cr>
 nmap <silent> ,jbg :call JumpToBufferInJumpList('g')<cr>
 nmap <silent> ,ljb :call ListJumpToBuffers()<cr>
 
-function! DiffCurrentFileAgainstAnother(snipoff, replacewith)
-    let currentFile = expand('%:p')
-    let otherfile = substitute(currentFile, "^" . a:snipoff, a:replacewith, '')
-    only
-    execute "vertical diffsplit " . otherfile
-endfunction
-
-command! -nargs=+ DiffCurrent call DiffCurrentFileAgainstAnother(<f-args>)
-
-function! RunSystemCall(systemcall)
-    let output = system(a:systemcall)
-    let output = substitute(output, "\n", '', 'g')
-    return output
-endfunction
-
 function! HighlightAllOfWord(onoff)
     if a:onoff == 1
         :augroup highlight_all
@@ -582,39 +480,6 @@ endfunction
 :nmap ,ha :call HighlightAllOfWord(1)<cr>
 :nmap ,hA :call HighlightAllOfWord(0)<cr>
 
-function! LengthenCWD()
-  let cwd = getcwd()
-    if cwd == '/'
-        return
-    endif
-  let lengthend = substitute(cwd, '/[^/]*$', '', '')
-    if lengthend == ''
-        let lengthend = '/'
-    endif
-    if cwd != lengthend
-      exec ":lcd " . lengthend
-  endif
-endfunction
-
-:nmap ,ld :call LengthenCWD()<cr>
-
-function! ShortenCWD()
-  let cwd = split(getcwd(), '/')
-  let filedir = split(expand("%:p:h"), '/')
-    let i = 0
-    let newdir = ""
-    while i < len(filedir)
-        let newdir = newdir . "/" . filedir[i]
-        if len(cwd) == i || filedir[i] != cwd[i]
-            break
-        endif
-        let i = i + 1
-    endwhile
-    exec ":lcd /" . newdir
-endfunction
-
-:nmap ,sd :call ShortenCWD()<cr>
-
 function! RedirToYankRegisterF(cmd, ...)
     let cmd = a:cmd . " " . join(a:000, " ")
     redir @*>
@@ -625,60 +490,9 @@ endfunction
 command! -complete=command -nargs=+ RedirToYankRegister 
   \ silent! call RedirToYankRegisterF(<f-args>)
 
-function! ToggleMinimap()
-    if exists("s:isMini") && s:isMini == 0
-        let s:isMini = 1
-    else
-        let s:isMini = 0
-    end
-
-    if (s:isMini == 0)
-        " save current visible lines
-        let s:firstLine = line("w0")
-        let s:lastLine = line("w$")
-
-        " make font small
-        exe "set guifont=" . g:small_font
-        " highlight lines which were visible
-        let s:lines = ""
-        for i in range(s:firstLine, s:lastLine)
-            let s:lines = s:lines . "\\%" . i . "l"
-
-            if i < s:lastLine
-                let s:lines = s:lines . "\\|"
-            endif
-        endfor
-
-        exe 'match Visible /' . s:lines . '/'
-        hi Visible guibg=lightblue guifg=black term=bold
-        nmap <s-j> 10j
-        nmap <s-k> 10k
-    else
-        exe "set guifont=" . g:main_font
-        hi clear Visible
-        nunmap <s-j>
-        nunmap <s-k>
-    endif
-endfunction
-
-command! ToggleMinimap call ToggleMinimap()
-
-" I /literally/ never use this and it's pissing me off
-" nnoremap <space> :ToggleMinimap<CR>
-
-"-----------------------------------------------------------------------------
-" Commands
-"-----------------------------------------------------------------------------
-
 "-----------------------------------------------------------------------------
 " Auto commands
 "-----------------------------------------------------------------------------
-augroup derek_xsd
-    au!
-    au BufEnter *.xsd,*.wsdl,*.xml setl tabstop=4 shiftwidth=4
-    au BufEnter *.xsd,*.wsdl,*.xml setl formatoptions=crq textwidth=120 colorcolumn=120
-augroup END
-
 augroup Binary
   au!
   au BufReadPre   *.bin let &bin=1
@@ -709,43 +523,42 @@ autocmd BufEnter,BufNew *.sc :set filetype=secrec
 "-----------------------------------------------------------------------------
 " Fix constant spelling mistakes
 "-----------------------------------------------------------------------------
-
-iab Acheive    Achieve
-iab acheive    achieve
-iab Alos       Also
-iab alos       also
-iab Aslo       Also
-iab aslo       also
-iab Becuase    Because
-iab becuase    because
-iab Bianries   Binaries
-iab bianries   binaries
-iab Bianry     Binary
-iab bianry     binary
-iab Charcter   Character
-iab charcter   character
-iab Charcters  Characters
-iab charcters  characters
-iab Exmaple    Example
-iab exmaple    example
-iab Exmaples   Examples
-iab exmaples   examples
-iab Fone       Phone
-iab fone       phone
-iab Lifecycle  Life-cycle
-iab lifecycle  life-cycle
-iab Lifecycles Life-cycles
-iab lifecycles life-cycles
-iab Seperate   Separate
-iab seperate   separate
-iab Seureth    Suereth
-iab seureth    suereth
-iab Shoudl     Should
-iab shoudl     should
-iab Taht       That
-iab taht       that
-iab Teh        The
-iab teh        the
+"iab Acheive    Achieve
+"iab acheive    achieve
+"iab Alos       Also
+"iab alos       also
+"iab Aslo       Also
+"iab aslo       also
+"iab Becuase    Because
+"iab becuase    because
+"iab Bianries   Binaries
+"iab bianries   binaries
+"iab Bianry     Binary
+"iab bianry     binary
+"iab Charcter   Character
+"iab charcter   character
+"iab Charcters  Characters
+"iab charcters  characters
+"iab Exmaple    Example
+"iab exmaple    example
+"iab Exmaples   Examples
+"iab exmaples   examples
+"iab Fone       Phone
+"iab fone       phone
+"iab Lifecycle  Life-cycle
+"iab lifecycle  life-cycle
+"iab Lifecycles Life-cycles
+"iab lifecycles life-cycles
+"iab Seperate   Separate
+"iab seperate   separate
+"iab Seureth    Suereth
+"iab seureth    suereth
+"iab Shoudl     Should
+"iab shoudl     should
+"iab Taht       That
+"iab taht       that
+"iab Teh        The
+"iab teh        the
 
 "-----------------------------------------------------------------------------
 " Set up the window colors and size
