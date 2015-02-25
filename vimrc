@@ -413,7 +413,8 @@ let g:Tex_ViewRule_pdf='okular'
 "-----------------------------------------------------------------------------
 " EasyTags Plugin Settings
 "-----------------------------------------------------------------------------
-:let g:easytags_on_cursorhold = 0
+let g:easytags_async = 1
+let g:easytags_on_cursorhold = 0
 
 "-----------------------------------------------------------------------------
 " Functions
