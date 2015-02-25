@@ -9,6 +9,7 @@
 * **FuzzyFinder**:      `git clone https://github.com/vim-scripts/FuzzyFinder.git vim-fuzzyfinder`
 * **Gundo**:            `git clone https://github.com/sjl/gundo.vim.git vim-gundo`
 * **JavaScript**:       `git clone https://github.com/pangloss/vim-javascript.git vim-javascript`
+* **L9**:               `git clone https://github.com/vim-scripts/L9.git vim-l9`
 * **Misc**:             `git clone https://github.com/xolox/vim-misc.git vim-misc`
 * **NERDTree**:         `git clone https://github.com/scrooloose/nerdtree.git vim-nerdtree`
 * **Solarized**:        `git clone https://github.com/altercation/vim-colors-solarized.git vim-solarized`
