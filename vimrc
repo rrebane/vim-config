@@ -409,6 +409,7 @@ let g:ackhighlight = 1
 "-----------------------------------------------------------------------------
 let g:tex_flavor='latex'
 let g:Tex_ViewRule_pdf='okular'
+let g:Tex_GotoError=0
 
 "-----------------------------------------------------------------------------
 " EasyTags Plugin Settings
@@ -517,7 +518,7 @@ function! Preserve(command)
   call cursor(l, c)
 endfunction
 
-autocmd BufWritePre *.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.sh,*.erl,*.conf,*.xml :call Preserve("%s/\\s\\+$//e")
+autocmd BufWritePre *.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.sh,*.tex,*.erl,*.conf,*.xml :call Preserve("%s/\\s\\+$//e")
 
 autocmd BufEnter,BufNew *.sc :set filetype=secrec
 
