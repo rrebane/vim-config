@@ -2,18 +2,42 @@
 " Vim Configuration
 " Blantantly copied from: https://github.com/derekwyatt/vim-config
 "
+
+scriptencoding utf-8
+set encoding=utf-8
+
 "-----------------------------------------------------------------------------
 " Global Stuff
 "-----------------------------------------------------------------------------
-" Get pathogen up and running
-filetype off 
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+" Vundle
+set nocompatible
+filetype off
+set runtimepath+=~/.vim/bundle/Vundle.vim
 
-" Add xptemplate global personal directory value
-if has("unix")
-  set runtimepath+=~/.vim/xpt-personal
-endif
+call vundle#begin()
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'derekwyatt/vim-fswitch'
+Plugin 'lervag/vimtex'
+Plugin 'mileszs/ack.vim'
+Plugin 'rking/ag.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'sjl/gundo.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'pangloss/vim-javascript'
+Plugin 'vim-scripts/EasyMotion'
+Plugin 'vim-scripts/FuzzyFinder'
+Plugin 'vim-scripts/L9'
+Plugin 'xolox/vim-easytags'
+Plugin 'xolox/vim-misc'
+Plugin 'xuhdev/vim-latex-live-preview'
+call vundle#end()
+filetype plugin indent on
+
+" Set filetype stuff to on
+filetype on
+filetype plugin on
+filetype indent on
 
 " CScope
 if has("cscope")
@@ -31,11 +55,6 @@ if has("cscope")
     set csverb
 endif
 
-" Set filetype stuff to on
-filetype on
-filetype plugin on
-filetype indent on
-
 " Tabstops are 4 spaces
 set tabstop=4
 set shiftwidth=4
@@ -43,17 +62,9 @@ set softtabstop=4
 set expandtab
 set autoindent
 
-" Except for some file types
-autocmd FileType html setlocal tabstop=2 shiftwidth=2 softtabstop=2
-autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2
-
-" Disable wrapping for shell files
-autocmd FileType sh set textwidth=0
-
 " Show tabs as >--- and spaces as ·
+set list!
 set listchars=tab:>-,trail:·
-" This enables it
-set list
 
 " set the search scan to wrap lines
 set wrapscan
@@ -79,7 +90,7 @@ set vb
 " Allow backspacing over indent, eol, and the start of an insert
 set backspace=2
 
-" Make sure that unsaved buffers that are to be put in the background are 
+" Make sure that unsaved buffers that are to be put in the background are
 " allowed to go in there (ie. the "must save first" error doesn't come up)
 set hidden
 
@@ -341,11 +352,6 @@ nmap <silent> ,oj :FSBelow<CR>
 nmap <silent> ,oJ :FSSplitBelow<CR>
 
 "-----------------------------------------------------------------------------
-" XPTemplate settings
-"-----------------------------------------------------------------------------
-let g:xptemplate_brace_complete = ''
-
-"-----------------------------------------------------------------------------
 " FuzzyFinder Settings
 "-----------------------------------------------------------------------------
 let g:fuf_file_exclude = '\v\~$|\.(o|lo|exe|dll|bak|class|meta|lock|orig|jar|swp)$|/test/data\.|(^|[/\\])\.(hg|git|bzr)($|[/\\])'
@@ -479,8 +485,8 @@ function! HighlightAllOfWord(onoff)
     endif
 endfunction
 
-:nmap ,ha :call HighlightAllOfWord(1)<cr>
-:nmap ,hA :call HighlightAllOfWord(0)<cr>
+nmap ,ha :call HighlightAllOfWord(1)<cr>
+nmap ,hA :call HighlightAllOfWord(0)<cr>
 
 function! RedirToYankRegisterF(cmd, ...)
     let cmd = a:cmd . " " . join(a:000, " ")
@@ -491,6 +497,21 @@ endfunction
 
 command! -complete=command -nargs=+ RedirToYankRegister 
   \ silent! call RedirToYankRegisterF(<f-args>)
+
+"function! Paste(url)
+"    if confirm("Paste to '" . a:url . "'?", "&Yes\n&No", 2) == 1
+"        exec "w !curl -d paste=\"$(cat)\" " . a:url
+"    endif
+"endfunction
+"
+"function! PasteSelection(url)
+"    if confirm("Paste to '" . a:url . "'?", "&Yes\n&No", 2) == 1
+"        exec "'<,'>w !curl -d paste=\"$(cat)\" " . a:url
+"    endif
+"endfunction
+""
+"map ,cp :call Paste("http://paste.cyber.ee/")<cr>
+"vmap ,cp <esc>:call PasteSelection("http://paste.cyber.ee/")<cr>
 
 "-----------------------------------------------------------------------------
 " Auto commands
@@ -518,76 +539,13 @@ function! Preserve(command)
   call cursor(l, c)
 endfunction
 
-autocmd BufWritePre *.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.sh,*.tex,*.erl,*.conf,*.xml :call Preserve("%s/\\s\\+$//e")
+autocmd BufWritePre *.cmake,*.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.sh,*.tex,*.erl,*.conf,*.xml :call Preserve("%s/\\s\\+$//e")
 
 autocmd BufEnter,BufNew *.sc :set filetype=secrec
-
-"-----------------------------------------------------------------------------
-" Fix constant spelling mistakes
-"-----------------------------------------------------------------------------
-"iab Acheive    Achieve
-"iab acheive    achieve
-"iab Alos       Also
-"iab alos       also
-"iab Aslo       Also
-"iab aslo       also
-"iab Becuase    Because
-"iab becuase    because
-"iab Bianries   Binaries
-"iab bianries   binaries
-"iab Bianry     Binary
-"iab bianry     binary
-"iab Charcter   Character
-"iab charcter   character
-"iab Charcters  Characters
-"iab charcters  characters
-"iab Exmaple    Example
-"iab exmaple    example
-"iab Exmaples   Examples
-"iab exmaples   examples
-"iab Fone       Phone
-"iab fone       phone
-"iab Lifecycle  Life-cycle
-"iab lifecycle  life-cycle
-"iab Lifecycles Life-cycles
-"iab lifecycles life-cycles
-"iab Seperate   Separate
-"iab seperate   separate
-"iab Seureth    Suereth
-"iab seureth    suereth
-"iab Shoudl     Should
-"iab shoudl     should
-"iab Taht       That
-"iab taht       that
-"iab Teh        The
-"iab teh        the
+autocmd BufEnter,BufNew *.rmind :set filetype=r
 
 "-----------------------------------------------------------------------------
 " Set up the window colors and size
 "-----------------------------------------------------------------------------
-if has("gui_running")
-  exe "set guifont=" . g:main_font
-  if hostname() == "dqw-linux"
-    set background=light
-  else
-    set background=dark
-  endif
-  set t_Co=16
-  let g:solarized_termcolors=16
-  colorscheme solarized
-  if !exists("g:vimrcloaded")
-      winpos 0 0
-      if !&diff
-          winsize 130 120
-      else
-          winsize 227 120
-      endif
-      let g:vimrcloaded = 1
-  endif
-else
-  set background=dark
-  "set t_Co=16
-  "let g:solarized_termcolors=256
-  colorscheme solarized
-endif
-:nohls
+set background=dark
+colorscheme solarized
