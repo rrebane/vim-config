@@ -18,7 +18,6 @@ call vundle#begin()
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'derekwyatt/vim-fswitch'
 Plugin 'lervag/vimtex'
-Plugin 'mileszs/ack.vim'
 Plugin 'rking/ag.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
@@ -372,45 +371,6 @@ nmap <silent> ,ft :FufTag<cr>
 nmap <F5> :GundoToggle<cr>
 
 "-----------------------------------------------------------------------------
-" Conque Settings
-"-----------------------------------------------------------------------------
-let g:ConqueTerm_FastMode = 1
-let g:ConqueTerm_ReadUnfocused = 1
-let g:ConqueTerm_InsertOnEnter = 1
-let g:ConqueTerm_PromptRegex = '^-->'
-"let g:ConqueTerm_TERM = 'xterm'
-"
-"-----------------------------------------------------------------------------
-" Taglist Plugin Settings
-"-----------------------------------------------------------------------------
-" Toggle the taglist on an off with F8
-nmap <F8> :TlistToggle<CR>
-
-" Close the taglist with Shift-F8
-nmap <S-F8> :TlistClose<CR>
-
-" Disable highlighting
-let g:easytags_auto_highlight = 0
-
-" Other options
-let g:Tlist_Close_On_Select = 1
-let g:Tlist_Exit_OnlyWindow = 1
-let g:Tlist_GainFocus_On_ToggleOpen = 1
-let g:Tlist_Show_One_File = 1
-
-"-----------------------------------------------------------------------------
-" Ack Plugin Settings
-"-----------------------------------------------------------------------------
-" Using the Silver Searcher instead of Ack
-let g:ackprg = 'ag --nogroup --nocolor --column'
-
-"-----------------------------------------------------------------------------
-" Signs Plugin Settings
-"-----------------------------------------------------------------------------
-let g:vim_addon_signs = { 'provide_qf_command' : 0, 'provide_el_command' : 0 }
-let g:ackhighlight = 1
-
-"-----------------------------------------------------------------------------
 " Latex Plugin Settings
 "-----------------------------------------------------------------------------
 let g:tex_flavor='latex'
@@ -426,28 +386,6 @@ let g:easytags_on_cursorhold = 0
 "-----------------------------------------------------------------------------
 " Functions
 "-----------------------------------------------------------------------------
-if !exists('g:bufferJumpList')
-    let g:bufferJumpList = {}
-endif
-
-function! MarkBufferInJumpList(bufstr, letter)
-    let g:bufferJumpList[a:letter] = a:bufstr
-endfunction
-
-function! JumpToBufferInJumpList(letter)
-    if has_key(g:bufferJumpList, a:letter)
-        exe ":buffer " . g:bufferJumpList[a:letter]
-    else
-        echoerr a:letter . " isn't mapped to any existing buffer"
-    endif
-endfunction
-
-function! ListJumpToBuffers()
-    for key in keys(g:bufferJumpList)
-        echo key . " = " . g:bufferJumpList[key]
-    endfor
-endfunction
-
 function! IndentToNextBraceInLineAbove()
     :normal 0wk
     :normal "vyf(
@@ -456,22 +394,6 @@ function! IndentToNextBraceInLineAbove()
 endfunction
 
 nmap <silent> ,ii :call IndentToNextBraceInLineAbove()<cr>
-
-nmap <silent> ,mba :call MarkBufferInJumpList(expand('%:p'), 'a')<cr>
-nmap <silent> ,mbb :call MarkBufferInJumpList(expand('%:p'), 'b')<cr>
-nmap <silent> ,mbc :call MarkBufferInJumpList(expand('%:p'), 'c')<cr>
-nmap <silent> ,mbd :call MarkBufferInJumpList(expand('%:p'), 'd')<cr>
-nmap <silent> ,mbe :call MarkBufferInJumpList(expand('%:p'), 'e')<cr>
-nmap <silent> ,mbf :call MarkBufferInJumpList(expand('%:p'), 'f')<cr>
-nmap <silent> ,mbg :call MarkBufferInJumpList(expand('%:p'), 'g')<cr>
-nmap <silent> ,jba :call JumpToBufferInJumpList('a')<cr>
-nmap <silent> ,jbb :call JumpToBufferInJumpList('b')<cr>
-nmap <silent> ,jbc :call JumpToBufferInJumpList('c')<cr>
-nmap <silent> ,jbd :call JumpToBufferInJumpList('d')<cr>
-nmap <silent> ,jbe :call JumpToBufferInJumpList('e')<cr>
-nmap <silent> ,jbf :call JumpToBufferInJumpList('f')<cr>
-nmap <silent> ,jbg :call JumpToBufferInJumpList('g')<cr>
-nmap <silent> ,ljb :call ListJumpToBuffers()<cr>
 
 function! HighlightAllOfWord(onoff)
     if a:onoff == 1
@@ -487,31 +409,6 @@ endfunction
 
 nmap ,ha :call HighlightAllOfWord(1)<cr>
 nmap ,hA :call HighlightAllOfWord(0)<cr>
-
-function! RedirToYankRegisterF(cmd, ...)
-    let cmd = a:cmd . " " . join(a:000, " ")
-    redir @*>
-    exe cmd
-    redir END
-endfunction
-
-command! -complete=command -nargs=+ RedirToYankRegister 
-  \ silent! call RedirToYankRegisterF(<f-args>)
-
-"function! Paste(url)
-"    if confirm("Paste to '" . a:url . "'?", "&Yes\n&No", 2) == 1
-"        exec "w !curl -d paste=\"$(cat)\" " . a:url
-"    endif
-"endfunction
-"
-"function! PasteSelection(url)
-"    if confirm("Paste to '" . a:url . "'?", "&Yes\n&No", 2) == 1
-"        exec "'<,'>w !curl -d paste=\"$(cat)\" " . a:url
-"    endif
-"endfunction
-""
-"map ,cp :call Paste("http://paste.cyber.ee/")<cr>
-"vmap ,cp <esc>:call PasteSelection("http://paste.cyber.ee/")<cr>
 
 "-----------------------------------------------------------------------------
 " Auto commands
