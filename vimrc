@@ -17,6 +17,7 @@ set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'derekwyatt/vim-fswitch'
+Plugin 'elixir-lang/vim-elixir'
 Plugin 'lervag/vimtex'
 Plugin 'rking/ag.vim'
 Plugin 'scrooloose/nerdtree'
@@ -27,9 +28,10 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'vim-scripts/EasyMotion'
 Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'vim-scripts/L9'
-Plugin 'xolox/vim-easytags'
 Plugin 'xolox/vim-misc'
 Plugin 'xuhdev/vim-latex-live-preview'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
 call vundle#end()
 filetype plugin indent on
 
@@ -378,12 +380,6 @@ let g:Tex_ViewRule_pdf='okular'
 let g:Tex_GotoError=0
 
 "-----------------------------------------------------------------------------
-" EasyTags Plugin Settings
-"-----------------------------------------------------------------------------
-let g:easytags_async = 1
-let g:easytags_on_cursorhold = 0
-
-"-----------------------------------------------------------------------------
 " Functions
 "-----------------------------------------------------------------------------
 function! IndentToNextBraceInLineAbove()
@@ -438,6 +434,8 @@ endfunction
 
 autocmd BufWritePre *.cmake,*.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.sh,*.tex,*.erl,*.conf,*.xml :call Preserve("%s/\\s\\+$//e")
 
+autocmd BufEnter,BufNew *.edl :set filetype=c
+autocmd BufEnter,BufNew *.ex,*.exs :set filetype=erlang
 autocmd BufEnter,BufNew *.sc :set filetype=secrec
 autocmd BufEnter,BufNew *.rmind :set filetype=r
 
