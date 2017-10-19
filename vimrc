@@ -19,7 +19,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'derekwyatt/vim-fswitch'
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'lervag/vimtex'
-Plugin 'rking/ag.vim'
+Plugin 'mileszs/ack.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'sjl/gundo.vim'
@@ -378,6 +378,13 @@ nmap <F5> :GundoToggle<cr>
 let g:tex_flavor='latex'
 let g:Tex_ViewRule_pdf='okular'
 let g:Tex_GotoError=0
+
+"-----------------------------------------------------------------------------
+" fzf.vim Settings
+"-----------------------------------------------------------------------------
+nmap ; :Buffers<CR>
+nmap <Leader>t :Files<CR>
+nmap <Leader>r :Tags<CR>
 
 "-----------------------------------------------------------------------------
 " Functions
