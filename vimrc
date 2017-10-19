@@ -20,10 +20,10 @@ Plugin 'derekwyatt/vim-fswitch'
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'lervag/vimtex'
 Plugin 'mileszs/ack.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/syntastic'
-Plugin 'sjl/gundo.vim'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-commentary'
+Plugin 'scrooloose/nerdtree'
+Plugin 'sjl/gundo.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'vim-scripts/EasyMotion'
 Plugin 'vim-scripts/FuzzyFinder'
@@ -32,6 +32,13 @@ Plugin 'xolox/vim-misc'
 Plugin 'xuhdev/vim-latex-live-preview'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'w0rp/ale'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'mhinz/vim-signify'
+Plugin 'sheerun/vim-polyglot'
 call vundle#end()
 filetype plugin indent on
 
@@ -94,9 +101,6 @@ set backspace=2
 " Make sure that unsaved buffers that are to be put in the background are
 " allowed to go in there (ie. the "must save first" error doesn't come up)
 set hidden
-
-" Set the status line the way i like it
-set stl=%f\ %m\ %r%{fugitive#statusline()}\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\ [%b][0x%B]
 
 " tell VIM to always put a status line in, even if there is only one window
 set laststatus=2
@@ -385,6 +389,14 @@ let g:Tex_GotoError=0
 nmap ; :Buffers<CR>
 nmap <Leader>t :Files<CR>
 nmap <Leader>r :Tags<CR>
+
+"-----------------------------------------------------------------------------
+" ack.vim Settings
+"-----------------------------------------------------------------------------
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+nmap <Leader>a :Ag<CR>
 
 "-----------------------------------------------------------------------------
 " Functions
