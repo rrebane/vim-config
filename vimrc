@@ -39,6 +39,9 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'mhinz/vim-signify'
 Plugin 'sheerun/vim-polyglot'
+Plugin 'kana/vim-operator-user'
+Plugin 'rhysd/vim-clang-format'
+Plugin 'rust-lang/rust.vim'
 call vundle#end()
 filetype plugin indent on
 
@@ -197,6 +200,7 @@ set number
 " Spell checking
 set spell
 set spelllang=en_us
+"set spelllang=en_gb
 highlight clear SpellBad
 highlight SpellBad term=standout ctermfg=1 term=underline cterm=underline
 highlight clear SpellCap
@@ -316,6 +320,10 @@ set synmaxcol=2048
 set nocursorline
 set nocursorcolumn
 
+if v:version > 703 || v:version == 703 && has('patch541')
+  set formatoptions+=j
+endif
+
 if has("mac")
   let g:main_font = "Anonymous\\ Pro:h16"
   let g:small_font = "Anonymous\\ Pro:h2"
@@ -382,6 +390,10 @@ nmap <F5> :GundoToggle<cr>
 let g:tex_flavor='latex'
 let g:Tex_ViewRule_pdf='okular'
 let g:Tex_GotoError=0
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
 
 "-----------------------------------------------------------------------------
 " fzf.vim Settings
@@ -397,6 +409,50 @@ if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
 nmap <Leader>a :Ag<CR>
+
+"-----------------------------------------------------------------------------
+" ALE Settings
+"-----------------------------------------------------------------------------
+"let g:ale_lint_on_text_changed='normal'
+
+let g:ale_linters = {
+  \  'cpp': ['clang', 'clangtidy', 'cppcheck', 'cpplint', 'gcc']
+  \}
+
+let g:ale_pattern_options = {
+  \  'sharemind-hi.git': {
+  \    'ale_linters': {
+  \      'cpp': ['clang', 'cppcheck', 'cpplint', 'gcc']
+  \    }
+  \  }
+  \}
+
+let g:ale_cpp_clangtidy_options = '-std=c++14 -Wall'
+
+let g:ale_cpp_clangtidy_checks=[
+            \'*',
+            \'-cppcoreguidelines-pro-bounds-array-to-pointer-decay',
+            \'-cppcoreguidelines-pro-bounds-pointer-arithmetic',
+            \'-cppcoreguidelines-pro-type-vararg',
+            \'-google-build-using-namespace',
+            \'-google-readability-todo',
+            \'-google-runtime-references',
+            \'-llvm-header-guard',
+            \'-readability-implicit-bool-cast',
+            \'-readability-named-parameter',
+            \'-readability-non-const-parameter'
+            \]
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+"-----------------------------------------------------------------------------
+" vim-clang-format
+"-----------------------------------------------------------------------------
+"let g:clang_format#auto_format_on_insert_leave = 1
+let g:clang_format#enable_fallback_style = 0
+
+"autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+"autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
 
 "-----------------------------------------------------------------------------
 " Functions
@@ -451,7 +507,7 @@ function! Preserve(command)
   call cursor(l, c)
 endfunction
 
-autocmd BufWritePre *.cmake,*.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.sh,*.tex,*.erl,*.conf,*.xml :call Preserve("%s/\\s\\+$//e")
+autocmd BufWritePre *.cmake,*.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cs,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.jsx,*.sh,*.tex,*.erl,*.conf,*.xml :call Preserve("%s/\\s\\+$//e")
 
 autocmd BufEnter,BufNew *.edl :set filetype=c
 autocmd BufEnter,BufNew *.ex,*.exs :set filetype=erlang
