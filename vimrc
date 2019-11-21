@@ -14,38 +14,38 @@ set nocompatible
 filetype off
 set runtimepath+=~/.vim/bundle/Vundle.vim
 
-call vundle#begin()
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'derekwyatt/vim-fswitch'
-Plugin 'elixir-editors/vim-elixir'
-Plugin 'lervag/vimtex'
-Plugin 'mileszs/ack.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-commentary'
-Plugin 'scrooloose/nerdtree'
-Plugin 'sjl/gundo.vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'vim-scripts/EasyMotion'
-Plugin 'vim-scripts/FuzzyFinder'
-Plugin 'vim-scripts/L9'
-Plugin 'xolox/vim-misc'
-"Plugin 'xuhdev/vim-latex-live-preview'
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'dense-analysis/ale'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'mhinz/vim-signify'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'kana/vim-operator-user'
-Plugin 'rhysd/vim-clang-format'
-Plugin 'rust-lang/rust.vim'
-Plugin 'mhinz/vim-mix-format'
-"Plugin 'slashmili/alchemist.vim'
-Plugin 'ludovicchabant/vim-gutentags'
-call vundle#end()
+call plug#begin()
+Plug 'altercation/vim-colors-solarized'
+Plug 'derekwyatt/vim-fswitch'
+Plug 'elixir-editors/vim-elixir'
+Plug 'lervag/vimtex'
+Plug 'mileszs/ack.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+Plug 'scrooloose/nerdtree'
+Plug 'sjl/gundo.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'vim-scripts/EasyMotion'
+Plug 'vim-scripts/FuzzyFinder'
+Plug 'vim-scripts/L9'
+Plug 'xolox/vim-misc'
+"Plug 'xuhdev/vim-latex-live-preview'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-unimpaired'
+Plug 'dense-analysis/ale'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'airblade/vim-gitgutter'
+Plug 'mhinz/vim-signify'
+Plug 'sheerun/vim-polyglot'
+Plug 'kana/vim-operator-user'
+Plug 'rhysd/vim-clang-format'
+Plug 'rust-lang/rust.vim'
+Plug 'mhinz/vim-mix-format'
+"Plug 'slashmili/alchemist.vim'
+Plug 'ludovicchabant/vim-gutentags'
+call plug#end()
 filetype plugin indent on
 
 " Set filetype stuff to on
@@ -390,13 +390,13 @@ nmap <F5> :GundoToggle<cr>
 "-----------------------------------------------------------------------------
 " Latex Plugin Settings
 "-----------------------------------------------------------------------------
-let g:tex_flavor='latex'
-let g:Tex_ViewRule_pdf='okular'
-let g:Tex_GotoError=0
-let g:vimtex_view_method='zathura'
-let g:vimtex_quickfix_mode=0
-set conceallevel=1
-let g:tex_conceal='abdmg'
+"let g:tex_flavor='latex'
+"let g:Tex_ViewRule_pdf='okular'
+"let g:Tex_GotoError=0
+"let g:vimtex_view_method='zathura'
+"let g:vimtex_quickfix_mode=0
+"set conceallevel=1
+"let g:tex_conceal='abdmg'
 
 "-----------------------------------------------------------------------------
 " fzf.vim Settings
@@ -411,6 +411,7 @@ nmap <Leader>l :BLines<CR>
 nmap <Leader>ll :Lines<CR>
 nmap <Leader>b :BCommits<CR>
 nmap <Leader>bb :Commits<CR>
+nmap <Leader>hh :Helptags<CR>
 
 "-----------------------------------------------------------------------------
 " ack.vim Settings
@@ -423,35 +424,37 @@ nmap <Leader>a :Ag<CR>
 "-----------------------------------------------------------------------------
 " ALE Settings
 "-----------------------------------------------------------------------------
-"let g:ale_lint_on_text_changed='normal'
+let g:ale_lint_on_text_changed='never'
+"let g:ale_lint_delay=200
 
-let g:ale_linters = {
-  \  'cpp': ['clang', 'clangtidy', 'cppcheck', 'cpplint', 'gcc']
-  \}
-
-let g:ale_pattern_options = {
-  \  'sharemind-hi.git': {
-  \    'ale_linters': {
-  \      'cpp': ['clang', 'cppcheck', 'cpplint', 'gcc']
-  \    }
-  \  }
-  \}
-
-let g:ale_cpp_clangtidy_options = '-std=c++14 -Wall'
-
-let g:ale_cpp_clangtidy_checks=[
-            \'*',
-            \'-cppcoreguidelines-pro-bounds-array-to-pointer-decay',
-            \'-cppcoreguidelines-pro-bounds-pointer-arithmetic',
-            \'-cppcoreguidelines-pro-type-vararg',
-            \'-google-build-using-namespace',
-            \'-google-readability-todo',
-            \'-google-runtime-references',
-            \'-llvm-header-guard',
-            \'-readability-implicit-bool-cast',
-            \'-readability-named-parameter',
-            \'-readability-non-const-parameter'
-            \]
+"let g:ale_linters = {
+"  \  'cpp': ['clang', 'clangtidy', 'cppcheck', 'cpplint', 'gcc'],
+"  \  'elixir': ['credo', 'dialyxir', 'dogma']
+"  \}
+"
+"let g:ale_pattern_options = {
+"  \  'sharemind-hi.git': {
+"  \    'ale_linters': {
+"  \      'cpp': ['clang', 'cppcheck', 'cpplint', 'gcc']
+"  \    }
+"  \  }
+"  \}
+"
+"let g:ale_cpp_clangtidy_options = '-std=c++14 -Wall'
+"
+"let g:ale_cpp_clangtidy_checks=[
+"            \'*',
+"            \'-cppcoreguidelines-pro-bounds-array-to-pointer-decay',
+"            \'-cppcoreguidelines-pro-bounds-pointer-arithmetic',
+"            \'-cppcoreguidelines-pro-type-vararg',
+"            \'-google-build-using-namespace',
+"            \'-google-readability-todo',
+"            \'-google-runtime-references',
+"            \'-llvm-header-guard',
+"            \'-readability-implicit-bool-cast',
+"            \'-readability-named-parameter',
+"            \'-readability-non-const-parameter'
+"            \]
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
