@@ -17,7 +17,7 @@ set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'derekwyatt/vim-fswitch'
-Plugin 'elixir-lang/vim-elixir'
+Plugin 'elixir-editors/vim-elixir'
 Plugin 'lervag/vimtex'
 Plugin 'mileszs/ack.vim'
 Plugin 'tpope/vim-fugitive'
@@ -29,11 +29,11 @@ Plugin 'vim-scripts/EasyMotion'
 Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'vim-scripts/L9'
 Plugin 'xolox/vim-misc'
-Plugin 'xuhdev/vim-latex-live-preview'
+"Plugin 'xuhdev/vim-latex-live-preview'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'tpope/vim-unimpaired'
-Plugin 'w0rp/ale'
+Plugin 'dense-analysis/ale'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'airblade/vim-gitgutter'
@@ -42,6 +42,9 @@ Plugin 'sheerun/vim-polyglot'
 Plugin 'kana/vim-operator-user'
 Plugin 'rhysd/vim-clang-format'
 Plugin 'rust-lang/rust.vim'
+Plugin 'mhinz/vim-mix-format'
+"Plugin 'slashmili/alchemist.vim'
+Plugin 'ludovicchabant/vim-gutentags'
 call vundle#end()
 filetype plugin indent on
 
@@ -400,7 +403,14 @@ let g:tex_conceal='abdmg'
 "-----------------------------------------------------------------------------
 nmap ; :Buffers<CR>
 nmap <Leader>t :Files<CR>
-nmap <Leader>r :Tags<CR>
+nmap <Leader>g :GFiles?<CR>
+nmap <Leader>gg :GFiles<CR>
+nmap <Leader>r :BTags<CR>
+nmap <Leader>rr :Tags<CR>
+nmap <Leader>l :BLines<CR>
+nmap <Leader>ll :Lines<CR>
+nmap <Leader>b :BCommits<CR>
+nmap <Leader>bb :Commits<CR>
 
 "-----------------------------------------------------------------------------
 " ack.vim Settings
@@ -510,7 +520,7 @@ endfunction
 autocmd BufWritePre *.cmake,*.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cs,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.jsx,*.sh,*.tex,*.erl,*.conf,*.xml :call Preserve("%s/\\s\\+$//e")
 
 autocmd BufEnter,BufNew *.edl :set filetype=c
-autocmd BufEnter,BufNew *.ex,*.exs :set filetype=erlang
+"autocmd BufEnter,BufNew *.ex,*.exs :set filetype=erlang
 autocmd BufEnter,BufNew *.sc :set filetype=secrec
 autocmd BufEnter,BufNew *.rmind :set filetype=r
 
