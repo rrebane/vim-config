@@ -45,6 +45,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'mhinz/vim-mix-format'
 "Plug 'slashmili/alchemist.vim'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'janko/vim-test'
 call plug#end()
 filetype plugin indent on
 
