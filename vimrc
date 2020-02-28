@@ -15,7 +15,6 @@ filetype off
 set runtimepath+=~/.vim/bundle/Vundle.vim
 
 call plug#begin()
-Plug 'altercation/vim-colors-solarized'
 Plug 'derekwyatt/vim-fswitch'
 Plug 'elixir-editors/vim-elixir'
 Plug 'lervag/vimtex'
@@ -46,6 +45,7 @@ Plug 'mhinz/vim-mix-format'
 "Plug 'slashmili/alchemist.vim'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'janko/vim-test'
+Plug 'lifepillar/vim-solarized8'
 call plug#end()
 filetype plugin indent on
 
@@ -224,23 +224,23 @@ let java_allow_cpp_keywords = 1
 let mapleader = ","
 
 " Toggle paste mode
-nmap <silent> ,pp :set invpaste<CR>:set paste?<CR>
+nmap <silent> <leader>pp :set invpaste<CR>:set paste?<CR>
 
 " Turn off that stupid highlight search
-nmap <silent> ,n :nohls<CR>
+nmap <silent> <leader>n :nohls<CR>
 
 " The following beast is something i didn't write... it will return the 
 " syntax highlighting group that the current "thing" under the cursor
 " belongs to -- very useful for figuring out what to change as far as 
 " syntax highlighting goes.
-nmap <silent> ,qq :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+nmap <silent> <leader>qq :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 " Make shift-insert work like in Xterm
 map <S-Insert> <MiddleMouse>
 map! <S-Insert> <MiddleMouse>
 
 " set text wrapping toggles
-nmap <silent> ,ww :set invwrap<CR>:set wrap?<CR>
+nmap <silent> <leader>ww :set invwrap<CR>:set wrap?<CR>
 
 " CScope mappings
 nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
@@ -253,26 +253,26 @@ nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
 " Maps to make handling windows a bit easier
-"noremap <silent> ,h :wincmd h<CR>
-"noremap <silent> ,j :wincmd j<CR>
-"noremap <silent> ,k :wincmd k<CR>
-"noremap <silent> ,l :wincmd l<CR>
-"noremap <silent> ,sb :wincmd p<CR>
+"noremap <silent> <leader>h :wincmd h<CR>
+"noremap <silent> <leader>j :wincmd j<CR>
+"noremap <silent> <leader>k :wincmd k<CR>
+"noremap <silent> <leader>l :wincmd l<CR>
+"noremap <silent> <leader>sb :wincmd p<CR>
 noremap <silent> <C-F9>  :vertical resize -10<CR>
 noremap <silent> <C-F10> :resize +10<CR>
 noremap <silent> <C-F11> :resize -10<CR>
 noremap <silent> <C-F12> :vertical resize +10<CR>
-noremap <silent> ,s8 :vertical resize 83<CR>
-noremap <silent> ,cj :wincmd j<CR>:close<CR>
-noremap <silent> ,ck :wincmd k<CR>:close<CR>
-noremap <silent> ,ch :wincmd h<CR>:close<CR>
-noremap <silent> ,cl :wincmd l<CR>:close<CR>
-noremap <silent> ,cc :close<CR>
-noremap <silent> ,cw :cclose<CR>
-noremap <silent> ,ml <C-W>L
-noremap <silent> ,mk <C-W>K
-noremap <silent> ,mh <C-W>H
-noremap <silent> ,mj <C-W>J
+noremap <silent> <leader>s8 :vertical resize 83<CR>
+noremap <silent> <leader>cj :wincmd j<CR>:close<CR>
+noremap <silent> <leader>ck :wincmd k<CR>:close<CR>
+noremap <silent> <leader>ch :wincmd h<CR>:close<CR>
+noremap <silent> <leader>cl :wincmd l<CR>:close<CR>
+noremap <silent> <leader>cc :close<CR>
+noremap <silent> <leader>cw :cclose<CR>
+noremap <silent> <leader>ml <C-W>L
+noremap <silent> <leader>mk <C-W>K
+noremap <silent> <leader>mh <C-W>H
+noremap <silent> <leader>mj <C-W>J
 noremap <silent> <C-7> <C-W>>
 noremap <silent> <C-8> <C-W>+
 noremap <silent> <C-9> <C-W>+
@@ -280,29 +280,29 @@ noremap <silent> <C-0> <C-W>>
 
 " Shrink the current window to fit the number of lines in the buffer.  Useful
 " for those buffers that are only a few lines
-nmap <silent> ,sw :execute ":resize " . line('$')<cr>
+nmap <silent> <leader>sw :execute ":resize " . line('$')<cr>
 
 " Edit the vimrc file
-nmap <silent> ,ev :e $MYVIMRC<CR>
-nmap <silent> ,sv :so $MYVIMRC<CR>
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " Add a GUID to the current line
 imap <C-J>d <C-r>=substitute(system("uuidgen"), '.$', '', 'g')<CR>
 
 " Search the current file for what's currently in the search register and display matches
-nmap <silent> ,gs :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+nmap <silent> <leader>gs :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 
 " Search the current file for the word under the cursor and display matches
-nmap <silent> ,gw :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+nmap <silent> <leader>gw :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 
 " Search the current file for the WORD under the cursor and display matches
-nmap <silent> ,gW :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+nmap <silent> <leader>gW :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 
 " Swap two words
 nmap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
 
 " Use the bufkill plugin to eliminate a buffer but keep the window layout
-nmap ,bd :BD<cr>
+nmap <leader>bd :BD<cr>
 
 " Use CTRL-E to replace the original ',' mapping
 nnoremap <C-E> ,
@@ -311,7 +311,7 @@ nnoremap <C-E> ,
 imap jj <esc>
 
 " Make the current file executable
-nmap ,x :w<cr>:!chmod 755 %<cr>:e<cr>
+nmap <leader>x :w<cr>:!chmod 755 %<cr>:e<cr>
 
 " Syntax coloring lines that are too long just slows down the world
 set synmaxcol=2048
@@ -358,15 +358,15 @@ let NERDTreeIgnore=[ '\.ncb$', '\.suo$', '\.vcproj\.RIMNET', '\.obj$',
 "-----------------------------------------------------------------------------
 " FSwitch mappings
 "-----------------------------------------------------------------------------
-nmap <silent> ,of :FSHere<CR>
-nmap <silent> ,ol :FSRight<CR>
-nmap <silent> ,oL :FSSplitRight<CR>
-nmap <silent> ,oh :FSLeft<CR>
-nmap <silent> ,oH :FSSplitLeft<CR>
-nmap <silent> ,ok :FSAbove<CR>
-nmap <silent> ,oK :FSSplitAbove<CR>
-nmap <silent> ,oj :FSBelow<CR>
-nmap <silent> ,oJ :FSSplitBelow<CR>
+nmap <silent> <leader>of :FSHere<CR>
+nmap <silent> <leader>ol :FSRight<CR>
+nmap <silent> <leader>oL :FSSplitRight<CR>
+nmap <silent> <leader>oh :FSLeft<CR>
+nmap <silent> <leader>oH :FSSplitLeft<CR>
+nmap <silent> <leader>ok :FSAbove<CR>
+nmap <silent> <leader>oK :FSSplitAbove<CR>
+nmap <silent> <leader>oj :FSBelow<CR>
+nmap <silent> <leader>oJ :FSSplitBelow<CR>
 
 "-----------------------------------------------------------------------------
 " FuzzyFinder Settings
@@ -375,13 +375,13 @@ let g:fuf_file_exclude = '\v\~$|\.(o|lo|exe|dll|bak|class|meta|lock|orig|jar|swp
 let g:fuf_splitPathMatching = 0
 let g:fuf_maxMenuWidth = 110
 let g:fuf_timeFormat = ''
-nmap <silent> ,fv :FufFile ~/.vim/<cr>
-nmap <silent> ,fb :FufBuffer<cr>
-nmap <silent> ,ff :FufFile<cr>
-nmap <silent> ,fc :FufMruCmd<cr>
-nmap <silent> ,fm :FufMruFile<cr>
-nmap <silent> ,fp :FufFile ~/git/*<cr>
-nmap <silent> ,ft :FufTag<cr>
+nmap <silent> <leader>fv :FufFile ~/.vim/<cr>
+nmap <silent> <leader>fb :FufBuffer<cr>
+nmap <silent> <leader>ff :FufFile<cr>
+nmap <silent> <leader>fc :FufMruCmd<cr>
+nmap <silent> <leader>fm :FufMruFile<cr>
+nmap <silent> <leader>fp :FufFile ~/git/*<cr>
+nmap <silent> <leader>ft :FufTag<cr>
 
 "-----------------------------------------------------------------------------
 " Gundo Settings
@@ -473,6 +473,18 @@ let g:clang_format#enable_fallback_style = 0
 "autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
 
 "-----------------------------------------------------------------------------
+" vim-test
+"-----------------------------------------------------------------------------
+let g:test#strategy = 'vimterminal'
+let test#vim#term_position = "botright 30"
+
+nmap <silent> <leader>tr :TestNearest<CR>
+nmap <silent> <leader>tR :TestFile<CR>
+nmap <silent> <leader>ta :TestSuite<CR>
+nmap <silent> <leader>tl :TestLast<CR>
+nmap <silent> <leader>tg :TestVbsit<CR>
+
+"-----------------------------------------------------------------------------
 " Functions
 "-----------------------------------------------------------------------------
 function! IndentToNextBraceInLineAbove()
@@ -482,7 +494,7 @@ function! IndentToNextBraceInLineAbove()
     :normal j"vPl
 endfunction
 
-nmap <silent> ,ii :call IndentToNextBraceInLineAbove()<cr>
+nmap <silent> <leader>ii :call IndentToNextBraceInLineAbove()<cr>
 
 function! HighlightAllOfWord(onoff)
     if a:onoff == 1
@@ -496,8 +508,8 @@ function! HighlightAllOfWord(onoff)
     endif
 endfunction
 
-nmap ,ha :call HighlightAllOfWord(1)<cr>
-nmap ,hA :call HighlightAllOfWord(0)<cr>
+nmap <leader>ha :call HighlightAllOfWord(1)<cr>
+nmap <leader>hA :call HighlightAllOfWord(0)<cr>
 
 "-----------------------------------------------------------------------------
 " Auto commands
@@ -535,5 +547,7 @@ autocmd BufEnter,BufNew *.rmind :set filetype=r
 "-----------------------------------------------------------------------------
 " Set up the window colors and size
 "-----------------------------------------------------------------------------
+set termguicolors
+
 set background=dark
-colorscheme solarized
+colorscheme solarized8
