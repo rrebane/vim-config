@@ -46,6 +46,11 @@ Plug 'mhinz/vim-mix-format'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'janko/vim-test'
 Plug 'lifepillar/vim-solarized8'
+Plug 'wlangstroth/vim-racket'
+Plug 'vim-syntastic/syntastic'
+Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 filetype plugin indent on
 
@@ -69,6 +74,10 @@ if has("cscope")
     endif
     set csverb
 endif
+
+" Search down into sub-directories
+" Provides tab-completion for all file related tasks
+set path+=**
 
 " Tabstops are 4 spaces
 set tabstop=4
@@ -194,7 +203,96 @@ set clipboard+=unnamed
 " Automatically read a file that has changed on disk
 set autoread
 
-set grepprg=grep\ -nH\ $*
+set grepprg=ag\ --vimgrep
+
+"-----------------------------------------------------------------------------
+" coc.nvim BEGIN
+"-----------------------------------------------------------------------------
+
+" Some servers have issues with backup files, see #649.
+set nobackup
+set nowritebackup
+
+" Give more space for displaying messages.
+set cmdheight=2
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+"-----------------------------------------------------------------------------
+" coc.nvim END
+"-----------------------------------------------------------------------------
+
+" Map Ctrl+P, Ctrl+N to prev-next search result
+nnoremap <silent> <C-p> :cp<CR>
+nnoremap <silent> <C-n> :cn<CR>
+
+nnoremap <leader>w :split <CR> :grep <cword> . <CR>
 
 " Trying out the line numbering thing... never liked it, but that doesn't mean
 " I shouldn't give it another go :)
@@ -421,16 +519,19 @@ nmap <Leader>hh :Helptags<CR>
 "-----------------------------------------------------------------------------
 " ack.vim Settings
 "-----------------------------------------------------------------------------
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
-nmap <Leader>a :Ag<CR>
+nmap <Leader>a :Rg<CR>
 
 "-----------------------------------------------------------------------------
 " ALE Settings
 "-----------------------------------------------------------------------------
 let g:ale_lint_on_text_changed='never'
 "let g:ale_lint_delay=200
+
+let g:ale_ruby_rubocop_executable = 'bundle'
+
+let g:ale_linters = {
+  \  'haskell': ['cabal_ghc', 'cspell', 'ghc_mod', 'hdevtools', 'hie', 'hlint', 'hls', 'stack_build']
+  \}
 
 "let g:ale_linters = {
 "  \  'cpp': ['clang', 'clangtidy', 'cppcheck', 'cpplint', 'gcc'],
@@ -485,6 +586,11 @@ nmap <silent> <leader>tl :TestLast<CR>
 nmap <silent> <leader>tg :TestVbsit<CR>
 
 "-----------------------------------------------------------------------------
+" syntastic
+"-----------------------------------------------------------------------------
+let g:syntastic_enable_racket_racket_checker = 1
+
+"-----------------------------------------------------------------------------
 " Functions
 "-----------------------------------------------------------------------------
 function! IndentToNextBraceInLineAbove()
@@ -537,12 +643,13 @@ function! Preserve(command)
   call cursor(l, c)
 endfunction
 
-autocmd BufWritePre *.cmake,*.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cs,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.jsx,*.sh,*.tex,*.erl,*.conf,*.xml :call Preserve("%s/\\s\\+$//e")
+autocmd BufWritePre *.cmake,*.h,*.hh,*.hpp,*.hxx,*.h++,*.cc,*.cpp,*.cs,*.cxx,*.c++,*.c,*.py,*.sc,*.sa,*.java,*.stg,*.g,*.html,*.js,*.jsx,*.sh,*.tex,*.erl,*.conf,*.xml,*.yaml,*.yml,*.json,*.ex,*.exs :call Preserve("%s/\\s\\+$//e")
 
 autocmd BufEnter,BufNew *.edl :set filetype=c
 "autocmd BufEnter,BufNew *.ex,*.exs :set filetype=erlang
 autocmd BufEnter,BufNew *.sc :set filetype=secrec
 autocmd BufEnter,BufNew *.rmind :set filetype=r
+autocmd BufEnter,BufNew *.template :set filetype=yaml
 
 "-----------------------------------------------------------------------------
 " Set up the window colors and size
